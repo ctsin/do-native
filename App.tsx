@@ -1,24 +1,19 @@
 import React from "react";
-import Home from "./src/components/Home";
+import { Server } from "miragejs";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import userReducer from "./src/slices/userSlice";
+import Home from "./src/components/Home";
+import checkReducer from "./src/slices/checkSlice";
 
 const store = configureStore({
-  reducer: userReducer,
+  reducer: checkReducer,
 });
-
-import { Server } from "miragejs";
 
 new Server({
   routes() {
     this.namespace = "/api";
 
-    this.get("/users", () => [
-      { id: "1", name: "Luke", completed: false },
-      { id: "2", name: "Leah", completed: false },
-      { id: "3", name: "Anakin", completed: false },
-    ]);
+    this.get("/check", () => ({ checked: true }));
   },
 });
 

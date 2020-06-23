@@ -1,25 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { User } from "../interfaces/user.interface";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCheckStatus } from "../slices/checkSlice";
 
 export default function Home() {
-  const [users, setUsers] = useState<User[]>([]);
+  const dispatch = useDispatch();
+  const  checked = useSelector(({ checked }) => checked);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await fetch("/api/users");
-      const result = await res.json();
-      setUsers(result);
-    };
-
-    fetchUser();
-  }, []);
+    dispatch(fetchCheckStatus());
+  });
 
   return (
     <View style={styles.container}>
-      {users.map(({ id, name }: User) => (
-        <Text key={id}>{name}</Text>
-      ))}
+      <Text> {String(checked)}</Text>
     </View>
   );
 }
