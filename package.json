@@ -10,12 +10,14 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
     "expo": "~37.0.3",
+    "expo-cli": "^3.21.9",
+    "global": "^4.4.0",
+    "miragejs": "^0.1.40",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
     "react-native-screens": "~2.2.0",
     "react-native-web": "~0.11.7",
-    "miragejs": "^0.1.40",
     "react-redux": "^7.2.0"
   },
   "devDependencies": {
