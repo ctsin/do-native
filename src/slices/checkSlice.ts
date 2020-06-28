@@ -1,23 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Check } from "../interfaces/check.interface";
+import { AppThunk } from "../../App";
+
+const initialState: Check = { checked: false };
 
 const checkSlice = createSlice({
   name: "checkbox",
-  initialState: {},
+  initialState,
   reducers: {
-    getCheckStatus(state, action) {
-      state.checked = action.payload.checked
+    getCheckStatus(state, { payload: { checked } }: PayloadAction<Check>) {
+      state.checked = checked;
     },
-    setCheckStatus(state, action) {},
   },
 });
 
-export const { getCheckStatus, setCheckStatus } = checkSlice.actions;
+export const { getCheckStatus } = checkSlice.actions;
 
 export default checkSlice.reducer;
 
-export const fetchCheckStatus = () => async (dispatch) => {
+export const fetchCheckStatus = (): AppThunk => async (dispatch) => {
   try {
-    const checkboxStatus = await fetch("/api/check").then((r) => r.json());
+    const checkboxStatus: Check = await fetch("/api/check").then((r) => r.json());
 
     dispatch(getCheckStatus(checkboxStatus));
   } catch {

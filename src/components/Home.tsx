@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCheckStatus } from "../slices/checkSlice";
+import { RootState } from "../../App";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const  checked = useSelector(({ checked }) => checked);
+  const checked = useSelector(({ check: { checked } }: RootState) => checked);
 
   useEffect(() => {
     dispatch(fetchCheckStatus());
