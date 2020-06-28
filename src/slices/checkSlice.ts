@@ -2,27 +2,33 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Check } from "../interfaces/check.interface";
 import { AppThunk } from "../../App";
 
-const initialState: Check = { checked: false };
+const initialState: Check = false;
 
 const checkSlice = createSlice({
   name: "checkbox",
   initialState,
   reducers: {
-    getCheckStatus(state, { payload: { checked } }: PayloadAction<Check>) {
-      state.checked = checked;
-    },
+    /**
+     * ! Issues: if the initState is not a object, it should renturn the computed state,
+     * ! instead of updating the object by using Immer under the hook.
+     *
+     * Example
+     * {@link https://redux-toolkit.js.org/api/createSlice#reducers}
+     */
+    getCheckStatus: (state, { payload }: PayloadAction<Check>) => (state = payload),
   },
 });
 
+// Todo: Consider to rmeove `export` syntax
 export const { getCheckStatus } = checkSlice.actions;
 
 export default checkSlice.reducer;
 
 export const fetchCheckStatus = (): AppThunk => async (dispatch) => {
   try {
-    const checkboxStatus: Check = await fetch("/api/check").then((r) => r.json());
+    const { checked }: { checked: Check } = await fetch("/api/check").then((r) => r.json());
 
-    dispatch(getCheckStatus(checkboxStatus));
+    dispatch(getCheckStatus(checked));
   } catch {
     throw new Error("Oops!");
   }

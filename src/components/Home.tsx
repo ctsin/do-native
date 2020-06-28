@@ -6,7 +6,7 @@ import { RootState } from "../../App";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const checked = useSelector(({ check: { checked } }: RootState) => checked);
+  const checked = useSelector(({ check }: RootState) => check);
 
   useEffect(() => {
     dispatch(fetchCheckStatus());

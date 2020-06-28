@@ -16,7 +16,10 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
-// Have no idea on where it will be used
+/**
+ * Getting the Dispatch type
+ * {@link https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type}
+ */
 export type AppDispatch = typeof store.dispatch;
 
 // For async Actions
@@ -26,7 +29,7 @@ new Server({
   routes() {
     this.namespace = "/api";
 
-    this.get("/check", (): Check => ({ checked: false }));
+    this.get("/check", (): { checked: Check } => ({ checked: false }));
   },
 });
 

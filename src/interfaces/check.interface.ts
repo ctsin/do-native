@@ -1,3 +1,1 @@
-export interface Check {
-  checked: boolean;
-}
+export type Check = boolean;
