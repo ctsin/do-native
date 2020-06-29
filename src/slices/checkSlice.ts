@@ -19,8 +19,7 @@ const checkSlice = createSlice({
   },
 });
 
-// Todo: Consider to rmeove `export` syntax
-export const { getCheckStatus } = checkSlice.actions;
+const { getCheckStatus } = checkSlice.actions;
 
 export default checkSlice.reducer;
 
