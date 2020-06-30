@@ -1,34 +1,51 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Check } from "../interfaces/check.interface";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { Post } from "../interfaces/post.interface";
 import { AppThunk } from "../../App";
+import { API } from "../constants/api";
 
-const initialState: Check = false;
+const initialState: Record<"post" | "postFromThunkCreator", Post> = {
+  post: {} as Post,
+  postFromThunkCreator: {} as Post,
+};
 
-const checkSlice = createSlice({
-  name: "checkbox",
+export const fetchPostWithThunkCreator = createAsyncThunk<Post, number>(
+  "post/fetchPostWithThunkCreator",
+  async (postId: number) => {
+    const post = await fetch(`${API}posts/${postId}`)
+      .then((res) => res.json())
+      .catch((err) => console.log(err));
+
+    return post;
+  }
+);
+
+const postSlice = createSlice({
+  name: "post",
   initialState,
   reducers: {
-    /**
-     * ! Issues: if the initState is not a object, it should renturn the computed state,
-     * ! instead of updating the object by using Immer under the hook.
-     *
-     * Example
-     * {@link https://redux-toolkit.js.org/api/createSlice#reducers}
-     */
-    getCheckStatus: (state, { payload }: PayloadAction<Check>) => (state = payload),
+    getPost(state, { payload }: PayloadAction<Post>) {
+      state.post = payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchPostWithThunkCreator.fulfilled, (state, { payload }) => {
+      state.postFromThunkCreator = payload;
+    });
   },
 });
 
-const { getCheckStatus } = checkSlice.actions;
+const { getPost } = postSlice.actions;
 
-export default checkSlice.reducer;
+export default postSlice.reducer;
 
-export const fetchCheckStatus = (): AppThunk => async (dispatch) => {
+export const fetchPost = (postId: number): AppThunk => async (dispatch) => {
   try {
-    const { checked }: { checked: Check } = await fetch("/api/check").then((r) => r.json());
+    const post: Post = await fetch(`${API}posts/${postId}`)
+      .then((res) => res.json())
+      .catch((err) => console.log(err));
 
-    dispatch(getCheckStatus(checked));
-  } catch {
-    throw new Error("Oops!");
+    dispatch(getPost(post));
+  } catch (err) {
+    console.log(err);
   }
 };

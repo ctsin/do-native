@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCheckStatus } from "../slices/checkSlice";
 import { RootState } from "../../App";
+import { fetchPostWithThunkCreator, fetchPost } from "../slices/checkSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const checked = useSelector(({ check }: RootState) => check);
+  const post = useSelector(({ JSONPlaceholderAPI: { post } }: RootState) => post);
+  const postFromThunkCreator = useSelector(
+    ({ JSONPlaceholderAPI: { postFromThunkCreator } }: RootState) => postFromThunkCreator
+  );
 
   useEffect(() => {
-    dispatch(fetchCheckStatus());
-  });
+    dispatch(fetchPost(1));
+    dispatch(fetchPostWithThunkCreator(2));
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text> {String(checked)}</Text>
+      <Text>{JSON.stringify(post)}</Text>
+      <Text>{JSON.stringify(postFromThunkCreator)}</Text>
     </View>
   );
 }
