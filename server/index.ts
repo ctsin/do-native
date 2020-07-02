@@ -1,4 +1,6 @@
-import { createServer, Model } from "miragejs";
+import { createServer, Model } from 'miragejs';
+import { API } from '../src/constants';
+import { User } from '../src/interfaces/user.interface';
 
 /**
  * `ts-ignore` comments for resolving schema type definition defect of MirageJS.
@@ -9,9 +11,9 @@ export default () => {
     models: { user: Model },
     routes() {
       // @ts-ignore
-      this.get("/check", (schema) => schema.checks.all());
+      this.get(API, (): User => ({ name: 'God', userId: '1', active: true }));
 
-      this.post("/check", (schema, request) => {
+      this.post(API, (schema, request) => {
         const attrs = JSON.parse(request.requestBody);
 
         // @ts-ignore
